@@ -1,16 +1,21 @@
-<div align=center>
-<h1 align=center>Research-Pilot<\h1>
 
-### Multi-Agent Intelligence for Structured, Fact-Checked Research
+<div align="center">
 
-> A locally powered multi-agent research assistant that transforms a research topic into structured insights through specialized AI agents for information gathering, summarization, fact-checking, and report generation.
+<h1>Research-Pilot</h1>
+Multi-Agent AI Research Assistant
+
+Research smarter with a team of specialized AI agents.
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python\&logoColor=white)](https://www.python.org/)
 [![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-black?logo=ollama)](https://ollama.com/)
 [![LLaMA](https://img.shields.io/badge/LLaMA-Local%20Inference-0467DF)](https://www.llama.com/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Interface-FF4B4B?logo=streamlit\&logoColor=white)](https://streamlit.io/)
 
-<\div>
+A locally powered multi-agent research system that searches, summarizes, fact-checks, and transforms information into structured research reports.
+
+</div>
+
+
 
 ---
 
