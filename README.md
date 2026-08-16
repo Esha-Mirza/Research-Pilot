@@ -69,10 +69,10 @@ ResearchForge AI uses four specialized agents:
 
 | Agent                  | Role                  | Responsibility                                    |
 | ---------------------- | --------------------- | ------------------------------------------------- |
-| 🔎 Search Agent        | Information Collector | Gathers research information and initial findings |
-| 🧠 Summarizer Agent    | Insight Extractor     | Condenses raw findings into concise insights      |
-| 🛡️ Fact-Checker Agent | Quality Reviewer      | Reviews findings for accuracy, bias, and gaps     |
-| 📝 Report Generator    | Research Writer       | Produces the final structured research report     |
+|  Search Agent          | Information Collector | Gathers research information and initial findings |
+|  Summarizer Agent      | Insight Extractor     | Condenses raw findings into concise insights      |
+|  Fact-Checker Agent    | Quality Reviewer      | Reviews findings for accuracy, bias, and gaps     |
+|  Report Generator      | Research Writer       | Produces the final structured research report     |
 
 ### How the Agents Work
 
@@ -422,14 +422,14 @@ The final stage focuses on transforming intermediate agent outputs into a struct
 
 ResearchForge AI can serve as a foundation for:
 
-* 🔬 Automated research workflows
-* 📚 Academic research assistance
-* 📊 Market and industry research
-* 🧠 Knowledge discovery
-* 📰 Research summarization
-* 💼 Business intelligence prototypes
-* 🤖 Multi-agent AI experimentation
-* 🧪 Agentic AI research and development
+*  Automated research workflows
+*  Academic research assistance
+*  Market and industry research
+*  Knowledge discovery
+*  Research summarization
+*  Business intelligence prototypes
+*  Multi-agent AI experimentation
+*  Agentic AI research and development
 
 ---
 
