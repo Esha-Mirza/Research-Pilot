@@ -1,20 +1,65 @@
+import os
 import requests
 
-MODEL = "llama3.2:3b"
-OLLAMA_URL = "http://localhost:11434/api/generate"
+MODEL = os.environ.get("OLLAMA_MODEL", "llama3.2:3b ")
+OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+REQUEST_TIMEOUT = int(os.environ.get("OLLAMA_TIMEOUT", "120"))
 
-def call_llm(prompt: str) -> str:
+
+def call_llm(prompt: str, temperature: float = 0.3, num_predict: int = 400) -> str:
+    """Call the local Ollama model and return its text response.
+
+    Any failure is returned as a readable "Error: ..." string (instead of
+    raising) so one agent failing doesn't take down the whole pipeline —
+    but the message now says *why* it failed instead of a bare KeyError.
+    """
+    payload = {
+        "model": MODEL,
+        "prompt": prompt,
+        "stream": False,
+        # Ollama's /api/generate has no top-level "max_tokens" field — that
+        # was silently ignored before. Generation length/creativity is
+        # controlled via "options" instead.
+        "options": {
+            "temperature": temperature,
+            "num_predict": num_predict,
+        },
+    }
+
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": MODEL,
-                "prompt": prompt,
-                "stream": False,
-                "max_tokens": 300
-            },
-            timeout=200
+        response = requests.post(OLLAMA_URL, json=payload, timeout=REQUEST_TIMEOUT)
+    except requests.exceptions.ConnectionError:
+        return (
+            f"Error: Could not reach Ollama at {OLLAMA_URL}. "
+            "Make sure it's running (`ollama serve`) and that the model has "
+            f"been pulled (`ollama pull {MODEL}`)."
         )
-        return response.json()["response"].strip()
-    except Exception as e:
-        return f"Error: {str(e)}"
+    except requests.exceptions.Timeout:
+        return (
+            f"Error: Ollama did not respond within {REQUEST_TIMEOUT}s. "
+            f"'{MODEL}' may still be loading into memory on first use — "
+            "try again, or raise the OLLAMA_TIMEOUT environment variable."
+        )
+    except requests.exceptions.RequestException as e:
+        return f"Error: Request to Ollama failed ({e})."
+
+    if response.status_code != 200:
+        # Ollama returns JSON like {"error": "model 'tinyllama' not found, try pulling it first"}
+        try:
+            detail = response.json().get("error", response.text)
+        except ValueError:
+            detail = response.text
+        return f"Error: Ollama returned HTTP {response.status_code} — {detail}"
+
+    try:
+        data = response.json()
+    except ValueError:
+        return "Error: Ollama returned a response that wasn't valid JSON."
+
+    if "error" in data:
+        return f"Error: {data['error']}"
+
+    if "response" not in data:
+        return f"Error: Unexpected response shape from Ollama: {data}"
+
+    return data["response"].strip()
