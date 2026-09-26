@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent AI Research Assistant</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Link to external CSS in static directory -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Ambient Glowing Background Elements -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <div class="app-container">
+
+        <!-- Asymmetrical Bento Grid -->
+        <div class="bento-master-grid">
+
+            <!-- 1. Header Widget -->
+            <header class="bento-card widget-header">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h1>Research Assistant</h1>
+                        <p>Powered by TinyLlama Multi-Agent Swarm</p>
+                    </div>
+                </div>
+                <div class="header-badge">
+                    <span class="status-dot"></span>
+                    <span>Ollama Engine Active</span>
+                </div>
+            </header>
+
+            <!-- 2. Photo / Ambient Visual Widget -->
+            <section class="bento-card widget-photo">
+                <span class="photo-overlay"><i class="fa-solid fa-diagram-project"></i>&nbsp; Multi-Agent
+                    Pipeline</span>
+            </section>
+
+            <!-- 3. Search Widget -->
+            <section class="bento-card widget-search">
+                <div>
+                    <div class="search-title">Research Topic</div>
+                    <div class="search-box-pill">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="topicInput" placeholder="e.g. AI trends in healthcare..."
+                            autocomplete="off">
+                    </div>
+                </div>
+                <button id="runBtn" class="btn-primary-pill">
+                    <i class="fa-solid fa-rocket"></i> Run Pipeline
+                </button>
+            </section>
+
+            <!-- 4. Preset Chips Widget -->
+            <section class="bento-card widget-presets">
+                <div class="search-title">Example Topics</div>
+                <div class="chip-container">
+                    <span class="chip">AI trends in healthcare</span>
+                    <span class="chip">Electric vehicle market 2026</span>
+                    <span class="chip">Blockchain in finance</span>
+                    <span class="chip">Quantum computing</span>
+                    <span class="chip">Renewable energy startups</span>
+                </div>
+            </section>
+
+            <!-- 5. Agent Swarm Quad Widget -->
+            <section class="bento-card widget-quad-grid">
+                <div class="search-title">Agent Swarm</div>
+                <div class="quad-container">
+                    <div class="quad-card agent-item" id="agent-0">
+                        <div class="quad-icon"><i class="fa-solid fa-compass"></i></div>
+                        <div>
+                            <div class="quad-title">Search Agent</div>
+                            <div class="quad-status agent-badge">Idle</div>
+                        </div>
+                    </div>
+
+                    <div class="quad-card agent-item" id="agent-1">
+                        <div class="quad-icon"><i class="fa-solid fa-list-check"></i></div>
+                        <div>
+                            <div class="quad-title">Summarizer</div>
+                            <div class="quad-status agent-badge">Idle</div>
+                        </div>
+                    </div>
+
+                    <div class="quad-card agent-item" id="agent-2">
+                        <div class="quad-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div>
+                            <div class="quad-title">Fact-Checker</div>
+                            <div class="quad-status agent-badge">Idle</div>
+                        </div>
+                    </div>
+
+                    <div class="quad-card agent-item" id="agent-3">
+                        <div class="quad-icon"><i class="fa-solid fa-file-contract"></i></div>
+                        <div>
+                            <div class="quad-title">Report Agent</div>
+                            <div class="quad-status agent-badge">Idle</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Central Results Stage -->
+            <section class="bento-card widget-center-stage">
+                <div class="stage-header">
+                    <div class="tabs-pill">
+                        <button class="tab-btn active" data-tab="search">
+                            <i class="fa-solid fa-magnifying-glass"></i> Search
+                        </button>
+                        <button class="tab-btn" data-tab="summary">
+                            <i class="fa-solid fa-file-lines"></i> Summary
+                        </button>
+                        <button class="tab-btn" data-tab="feedback">
+                            <i class="fa-solid fa-check-double"></i> Feedback
+                        </button>
+                        <button class="tab-btn" data-tab="report">
+                            <i class="fa-solid fa-award"></i> Final Report
+                        </button>
+                    </div>
+                </div>
+
+                <div id="tab-search" class="tab-pane active">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-microchip"></i>
+                        <p>Enter a topic and start the research pipeline to view live search results.</p>
+                    </div>
+                </div>
+
+                <div id="tab-summary" class="tab-pane">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-list-check"></i>
+                        <p>Summary findings generated by the Summarizer Agent will appear here.</p>
+                    </div>
+                </div>
+
+                <div id="tab-feedback" class="tab-pane">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <p>Fact-checking feedback and quality review will be displayed here.</p>
+                    </div>
+                </div>
+
+                <div id="tab-report" class="tab-pane">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-file-circle-check"></i>
+                        <p>The consolidated research report will render here after the process completes.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- 7. Floating Action Dock -->
+        <footer class="widget-dock">
+            <div class="dock-left">
+                <button id="copyBtn" class="dock-btn">
+                    <i class="fa-regular fa-copy"></i> Copy
+                </button>
+                <button id="downloadBtn" class="dock-btn">
+                    <i class="fa-solid fa-download"></i> Export
+                </button>
+            </div>
+            <div class="dock-right">
+                <span class="header-badge"
+                    style="background: rgba(199,183,163,0.08); border-color: rgba(199,183,163,0.15);">
+                    <i class="fa-solid fa-server" style="font-size:0.65rem;"></i>
+                    <span>4-agent · local LLM pipeline</span>
+                </span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Link to external JS in static directory -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

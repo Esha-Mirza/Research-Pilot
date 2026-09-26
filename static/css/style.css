@@ -1,0 +1,525 @@
+/* ==========================================================================
+   Coffee & Burgundy Asymmetrical Bento Widget Grid
+   ========================================================================== */
+
+:root {
+    --bg-deep: #0a0506;
+    --bg-card: rgba(22, 14, 16, 0.78);
+    --bg-card-alt: rgba(32, 19, 22, 0.85);
+    --bg-input: rgba(12, 7, 8, 0.7);
+
+    --color-burgundy-dark: #561C24;
+    --color-burgundy-mid: #6D2932;
+    --color-burgundy-glow: rgba(109, 41, 50, 0.35);
+
+    --color-cream-dark: #C7B7A3;
+    --color-cream-light: #E8D8C4;
+    --color-text-dim: #8c7e7b;
+
+    --border-card: 1px solid rgba(199, 183, 163, 0.12);
+    --border-glow: 1px solid rgba(109, 41, 50, 0.5);
+
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
+
+    --backdrop-blur: blur(24px);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-deep);
+    color: var(--color-cream-light);
+    overflow-x: hidden;
+}
+
+body {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Background Ambient Lighting */
+.ambient-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(140px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.glow-1 {
+    width: 600px;
+    height: 600px;
+    background: var(--color-burgundy-dark);
+    top: -200px;
+    left: -150px;
+    opacity: 0.45;
+}
+
+.glow-2 {
+    width: 600px;
+    height: 600px;
+    background: var(--color-burgundy-mid);
+    bottom: -200px;
+    right: -150px;
+    opacity: 0.35;
+}
+
+/* App Full-Width Layout */
+.app-container {
+    width: 100%;
+    height: calc(100vh - 2rem);
+    max-width: 100%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Master Asymmetrical Grid */
+.bento-master-grid {
+    display: grid;
+    grid-template-columns: 2.2fr 3fr 1.8fr;
+    grid-template-rows: 120px 1fr 1fr;
+    grid-template-areas:
+        "header    center   photo"
+        "search    center   quad"
+        "presets   center   quad";
+    gap: 1rem;
+    flex: 1;
+    height: calc(100% - 70px);
+}
+
+/* Base Card Styles */
+.bento-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    border: var(--border-card);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.bento-card:hover {
+    border-color: rgba(199, 183, 163, 0.25);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+}
+
+/* 1. Header Card Widget */
+.widget-header {
+    grid-area: header;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(86, 28, 36, 0.4), rgba(22, 14, 16, 0.8));
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.brand-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--color-burgundy-dark), var(--color-burgundy-mid));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: var(--color-cream-light);
+    box-shadow: 0 4px 15px rgba(86, 28, 36, 0.5);
+}
+
+.brand-text h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-cream-light);
+}
+
+.brand-text p {
+    font-size: 0.75rem;
+    color: var(--color-cream-dark);
+    opacity: 0.75;
+}
+
+.header-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(109, 41, 50, 0.3);
+    border: 1px solid var(--color-burgundy-mid);
+    padding: 0.35rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+/* 2. Photo / Visual Art Widget */
+.widget-photo {
+    grid-area: photo;
+    position: relative;
+    background: linear-gradient(180deg, rgba(86, 28, 36, 0.2), rgba(12, 7, 8, 0.9)),
+        url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop') center/cover;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.25rem;
+    border: var(--border-glow);
+}
+
+.photo-overlay {
+    background: rgba(18, 11, 12, 0.75);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 0.85rem;
+    border-radius: 100px;
+    font-size: 0.725rem;
+    font-weight: 600;
+    color: var(--color-cream-light);
+    border: var(--border-card);
+}
+
+/* 3. Search Bar Widget */
+.widget-search {
+    grid-area: search;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--bg-card-alt);
+}
+
+.search-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-cream-dark);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.search-box-pill {
+    position: relative;
+    width: 100%;
+}
+
+.search-box-pill input {
+    width: 100%;
+    background: var(--bg-input);
+    border: var(--border-card);
+    border-radius: 100px;
+    padding: 0.85rem 1.25rem 0.85rem 2.75rem;
+    color: var(--color-cream-light);
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.search-box-pill input:focus {
+    border-color: var(--color-cream-dark);
+    box-shadow: 0 0 15px rgba(199, 183, 163, 0.15);
+}
+
+.search-box-pill i {
+    position: absolute;
+    left: 1.15rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-dim);
+}
+
+.btn-primary-pill {
+    width: 100%;
+    background: linear-gradient(135deg, var(--color-burgundy-dark), var(--color-burgundy-mid));
+    color: var(--color-cream-light);
+    border: 1px solid rgba(199, 183, 163, 0.2);
+    padding: 0.75rem;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 0.825rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.25s ease;
+}
+
+.btn-primary-pill:hover {
+    box-shadow: 0 6px 20px var(--color-burgundy-glow);
+    background: linear-gradient(135deg, #6a232d, #82323c);
+}
+
+/* 4. Presets Chips Widget */
+.widget-presets {
+    grid-area: presets;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.chip {
+    background: rgba(199, 183, 163, 0.06);
+    border: var(--border-card);
+    color: var(--color-cream-dark);
+    padding: 0.4rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.725rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chip:hover {
+    background: var(--color-burgundy-mid);
+    color: var(--color-cream-light);
+    border-color: transparent;
+}
+
+/* 5. Quad Grid Widget (4 Square Cards) */
+.widget-quad-grid {
+    grid-area: quad;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.quad-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0.75rem;
+    flex: 1;
+    margin-top: 0.5rem;
+}
+
+.quad-card {
+    background: rgba(12, 7, 8, 0.5);
+    border: var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.quad-card.active {
+    border-color: var(--color-burgundy-mid);
+    background: rgba(109, 41, 50, 0.2);
+}
+
+.quad-card.completed {
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.quad-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: rgba(199, 183, 163, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--color-cream-dark);
+}
+
+.quad-title {
+    font-size: 0.775rem;
+    font-weight: 700;
+    color: var(--color-cream-light);
+}
+
+.quad-status {
+    font-size: 0.65rem;
+    color: var(--color-text-dim);
+}
+
+/* 6. Central Large Content Stage */
+.widget-center-stage {
+    grid-area: center;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    background: rgba(18, 11, 12, 0.85);
+    border: var(--border-glow);
+}
+
+.stage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(199, 183, 163, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tabs-pill {
+    display: flex;
+    gap: 0.25rem;
+    background: rgba(12, 7, 8, 0.6);
+    padding: 0.3rem;
+    border-radius: 100px;
+    border: var(--border-card);
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text-dim);
+    padding: 0.45rem 0.9rem;
+    border-radius: 100px;
+    font-size: 0.775rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.tab-btn.active {
+    background: var(--color-burgundy-mid);
+    color: var(--color-cream-light);
+    box-shadow: 0 4px 12px rgba(86, 28, 36, 0.4);
+}
+
+.tab-pane {
+    display: none;
+    flex: 1;
+}
+
+.tab-pane.active {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    animation: fadeIn 0.3s ease;
+}
+
+.content-display {
+    background: rgba(10, 5, 6, 0.6);
+    border: var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-cream-light);
+    white-space: pre-wrap;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: var(--color-text-dim);
+    text-align: center;
+    gap: 0.85rem;
+}
+
+.empty-state i {
+    font-size: 2.25rem;
+    color: var(--color-burgundy-mid);
+}
+
+/* 7. Bottom Floating Action Dock */
+.widget-dock {
+    height: 54px;
+    background: var(--bg-card);
+    backdrop-filter: var(--backdrop-blur);
+    border: var(--border-card);
+    border-radius: 100px;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.dock-left,
+.dock-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dock-btn {
+    background: rgba(199, 183, 163, 0.08);
+    border: var(--border-card);
+    color: var(--color-cream-dark);
+    padding: 0.45rem 1rem;
+    border-radius: 100px;
+    font-size: 0.775rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+}
+
+.dock-btn:hover {
+    background: rgba(199, 183, 163, 0.18);
+    color: var(--color-cream-light);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1100px) {
+    .bento-master-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "header"
+            "search"
+            "presets"
+            "center"
+            "quad"
+            "photo";
+        height: auto;
+    }
+}
