@@ -7,7 +7,9 @@ from agents.base import call_llm
 def run(summary: str) -> str:
     prompt = (
         "You are a careful fact-checker. Review the summary below for bias, "
-        "factual errors, unsupported claims, or missing context. List concrete "
+        "factual errors, unsupported claims, vague or generic filler "
+        "language (e.g. talking about 'industries' or 'market growth' when "
+        "the topic isn't a market), or missing context. List concrete "
         "issues as short bullet points. If you find none, say so plainly in "
         "one line.\n\n"
         f"Summary:\n{summary}\n\nReview:"

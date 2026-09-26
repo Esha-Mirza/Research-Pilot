@@ -7,8 +7,11 @@ from agents.base import call_llm
 def run(summary: str, feedback: str) -> str:
     prompt = (
         "Write a short, well-organized research report using only the summary "
-        "and reviewer feedback below — don't invent facts that aren't in them. "
-        "Structure it as: one title line, then 2-3 short paragraphs.\n\n"
+        "and reviewer feedback below — don't invent facts, statistics, or "
+        "context that aren't in them. If the material is thin or flagged as "
+        "ungrounded, say so honestly in the report rather than padding it "
+        "with generic claims. Structure it as: one title line, then 2-3 "
+        "short paragraphs.\n\n"
         f"Summary:\n{summary}\n\nReviewer feedback:\n{feedback}\n\nReport:"
     )
     return call_llm(prompt, temperature=0.3, num_predict=500)

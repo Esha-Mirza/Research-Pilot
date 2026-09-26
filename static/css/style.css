@@ -48,7 +48,16 @@ body {
     align-items: center;
     background:
         linear-gradient(180deg, rgba(10, 6, 4, 0.86), rgba(10, 6, 4, 0.93)),
-        url('https://images.unsplash.com/photo-1532901358310-36d51e6fa0e7?w=2200&q=80&auto=format&fit=crop') center 30% / cover fixed;
+        url('https://images.unsplash.com/photo-1532901358310-36d51e6fa0e7?w=1600&q=60&auto=format&fit=crop') center 30% / cover;
+}
+
+/* background-attachment:fixed is expensive to repaint (esp. on mobile,
+   where it's also unreliable) — only opt into it on capable, non-touch,
+   pointer-fine displays where the cost is worth the parallax feel. */
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+    body {
+        background-attachment: fixed;
+    }
 }
 
 /* Faint desk-lamp pool of light so the dossier reads as lit from above */
@@ -64,13 +73,22 @@ body::before {
 /* ---- Scene / perspective stage ------------------------------------------ */
 .app-container {
     width: 100%;
-    height: calc(100vh - 2.5rem);
+    height: calc(100svh - 2.5rem);
     max-width: 100%;
     z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    perspective: 2200px;
+}
+
+/* Perspective (needed for the 3D card tilt on hover) only matters on
+   devices that can actually hover with a precise pointer; skipping it
+   elsewhere avoids forcing every card onto its own GPU layer for an
+   effect that touch users never trigger. */
+@media (hover: hover) and (pointer: fine) {
+    .app-container {
+        perspective: 2200px;
+    }
 }
 
 .bento-master-grid {
@@ -95,20 +113,26 @@ body::before {
     color: var(--ink);
     box-shadow:
         0 2px 0 rgba(255, 255, 255, 0.35) inset,
-        0 1px 3px rgba(0, 0, 0, 0.15) inset,
-        0 18px 34px rgba(0, 0, 0, 0.55),
-        0 4px 8px rgba(0, 0, 0, 0.35);
+        0 10px 20px rgba(0, 0, 0, 0.4);
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-    transform-style: preserve-3d;
-    will-change: transform;
 }
 
-.bento-card:hover {
-    box-shadow:
-        0 2px 0 rgba(255, 255, 255, 0.4) inset,
-        0 1px 3px rgba(0, 0, 0, 0.15) inset,
-        0 30px 50px rgba(0, 0, 0, 0.6),
-        0 8px 14px rgba(0, 0, 0, 0.4);
+/* The 3D tilt-on-hover treatment (preserve-3d + will-change + deep
+   layered shadows) is only enabled where a mouse can actually hover.
+   On touch devices those properties did nothing useful but still cost
+   a promoted compositing layer per card — a real source of jank on
+   mid/low-end phones. */
+@media (hover: hover) and (pointer: fine) {
+    .bento-card {
+        transform-style: preserve-3d;
+        will-change: transform;
+    }
+
+    .bento-card:hover {
+        box-shadow:
+            0 2px 0 rgba(255, 255, 255, 0.4) inset,
+            0 20px 34px rgba(0, 0, 0, 0.5);
+    }
 }
 
 /* ==========================================================================
@@ -672,6 +696,24 @@ body::before {
     }
 }
 
+/* Touch devices don't have a real hover state, but many mobile browsers
+   still apply :hover styles on tap (and keep them "stuck" until the user
+   taps elsewhere) — that's a common source of a UI feeling laggy or
+   unresponsive on phones. Neutralize every tilt/translateZ hover effect
+   there so a tap just acts like a tap. */
+@media (hover: none) {
+
+    .bento-card:hover,
+    .widget-header:hover,
+    .widget-photo:hover,
+    .widget-search:hover,
+    .widget-presets:hover,
+    .widget-quad-grid:hover,
+    .widget-center-stage:hover {
+        transform: none;
+    }
+}
+
 @media (max-width: 1100px) {
     .bento-master-grid {
         grid-template-columns: 1fr;
@@ -692,5 +734,52 @@ body::before {
     .widget-quad-grid,
     .widget-center-stage {
         transform: none !important;
+    }
+
+    .app-container {
+        height: auto;
+        min-height: calc(100svh - 2.5rem);
+    }
+}
+
+/* Small phones: the 2x2 agent grid and horizontal tab bar both get
+   cramped below ~480px — stack/scroll them instead of squeezing. */
+@media (max-width: 480px) {
+    body {
+        padding: 0.75rem;
+    }
+
+    .quad-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+    }
+
+    .tabs-pill {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .tabs-pill::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-btn {
+        flex: 0 0 auto;
+    }
+
+    .widget-center-stage::before {
+        font-size: 0.58rem;
+        padding: 6px 12px 8px;
+    }
+
+    .widget-dock {
+        padding: 0 1rem;
+    }
+
+    .dock-btn span,
+    .dock-right span span {
+        font-size: 0.65rem;
     }
 }
