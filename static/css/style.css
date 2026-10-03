@@ -1,20 +1,19 @@
 /* ==========================================================================
-   FIELD DOSSIER — a research case-file laid out on a writer's desk.
-   Cards are index cards, sticky notes, ticket stubs and a folder — not
-   uniform rounded squares — tilted in 3D space like real paper.
+   FIELD DOSSIER — Darker Vintage Paper Theme with Scrollable Center Stage
    ========================================================================== */
 
 :root {
     --bg-void: #0d0705;
 
-    --paper: #efe4cc;
-    --paper-alt: #e7d8b6;
-    --paper-shadow: #c7b088;
-    --paper-line: rgba(86, 28, 36, 0.1);
+    /* Darker Warm Skin / Tan Palette */
+    --paper: #cfbe9b;
+    --paper-alt: #beaa83;
+    --paper-shadow: #a18a62;
+    --paper-line: rgba(86, 28, 36, 0.2);
 
-    --ink: #2a1b12;
-    --ink-soft: #5b4632;
-    --ink-faint: #8a7259;
+    --ink: #20130b;
+    --ink-soft: #4a3625;
+    --ink-faint: #6e5944;
 
     --burgundy-deep: #561c24;
     --burgundy-mid: #6d2932;
@@ -51,16 +50,12 @@ body {
         url('https://images.unsplash.com/photo-1532901358310-36d51e6fa0e7?w=1600&q=60&auto=format&fit=crop') center 30% / cover;
 }
 
-/* background-attachment:fixed is expensive to repaint (esp. on mobile,
-   where it's also unreliable) — only opt into it on capable, non-touch,
-   pointer-fine displays where the cost is worth the parallax feel. */
 @media (hover: hover) and (pointer: fine) and (min-width: 900px) {
     body {
         background-attachment: fixed;
     }
 }
 
-/* Faint desk-lamp pool of light so the dossier reads as lit from above */
 body::before {
     content: '';
     position: fixed;
@@ -70,10 +65,10 @@ body::before {
     z-index: 0;
 }
 
-/* ---- Scene / perspective stage ------------------------------------------ */
+/* ---- App Container --------------------------------------------------- */
 .app-container {
     width: 100%;
-    height: calc(100svh - 2.5rem);
+    height: calc(100vh - 2.5rem);
     max-width: 100%;
     z-index: 1;
     display: flex;
@@ -81,10 +76,6 @@ body::before {
     gap: 1rem;
 }
 
-/* Perspective (needed for the 3D card tilt on hover) only matters on
-   devices that can actually hover with a precise pointer; skipping it
-   elsewhere avoids forcing every card onto its own GPU layer for an
-   effect that touch users never trigger. */
 @media (hover: hover) and (pointer: fine) {
     .app-container {
         perspective: 2200px;
@@ -93,35 +84,31 @@ body::before {
 
 .bento-master-grid {
     display: grid;
-    grid-template-columns: 2.2fr 3fr 1.8fr;
+    grid-template-columns: 2.2fr 3.2fr 1.8fr;
     grid-template-rows: 120px 1fr 1fr;
     grid-template-areas:
         "header    center   photo"
         "search    center   quad"
         "presets   center   quad";
-    gap: 1.35rem 1.6rem;
+    gap: 1.25rem 1.4rem;
     flex: 1;
     height: calc(100% - 76px);
+    min-height: 0;
     transform-style: preserve-3d;
 }
 
-/* ---- Shared paper feel --------------------------------------------------- */
+/* ---- Shared Paper Card --------------------------------------------------- */
 .bento-card {
     background:
-        repeating-linear-gradient(178deg, rgba(0, 0, 0, 0.015) 0 2px, transparent 2px 5px),
+        repeating-linear-gradient(178deg, rgba(0, 0, 0, 0.02) 0 2px, transparent 2px 5px),
         linear-gradient(155deg, var(--paper) 0%, var(--paper-alt) 100%);
     color: var(--ink);
     box-shadow:
-        0 2px 0 rgba(255, 255, 255, 0.35) inset,
+        0 2px 0 rgba(255, 255, 255, 0.2) inset,
         0 10px 20px rgba(0, 0, 0, 0.4);
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
-/* The 3D tilt-on-hover treatment (preserve-3d + will-change + deep
-   layered shadows) is only enabled where a mouse can actually hover.
-   On touch devices those properties did nothing useful but still cost
-   a promoted compositing layer per card — a real source of jank on
-   mid/low-end phones. */
 @media (hover: hover) and (pointer: fine) {
     .bento-card {
         transform-style: preserve-3d;
@@ -130,13 +117,13 @@ body::before {
 
     .bento-card:hover {
         box-shadow:
-            0 2px 0 rgba(255, 255, 255, 0.4) inset,
+            0 2px 0 rgba(255, 255, 255, 0.25) inset,
             0 20px 34px rgba(0, 0, 0, 0.5);
     }
 }
 
 /* ==========================================================================
-   1. HEADER — masthead with a torn bottom edge
+   1. HEADER
    ========================================================================== */
 .widget-header {
     grid-area: header;
@@ -173,7 +160,7 @@ body::before {
     justify-content: center;
     font-size: 1.2rem;
     color: var(--paper);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 0 0 2px rgba(239, 228, 204, 0.35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 0 0 2px rgba(207, 190, 155, 0.35);
 }
 
 .brand-text h1 {
@@ -195,7 +182,7 @@ body::before {
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    background: rgba(86, 28, 36, 0.08);
+    background: rgba(86, 28, 36, 0.12);
     border: 1px solid var(--burgundy-mid);
     padding: 0.35rem 0.8rem;
     border-radius: 3px;
@@ -208,13 +195,13 @@ body::before {
 .status-dot {
     width: 7px;
     height: 7px;
-    background-color: #3f7a4a;
+    background-color: #2e6037;
     border-radius: 50%;
-    box-shadow: 0 0 6px #3f7a4a;
+    box-shadow: 0 0 6px #2e6037;
 }
 
 /* ==========================================================================
-   2. PHOTO — a pinned polaroid snapshot with a strip of tape
+   2. PHOTO
    ========================================================================== */
 .widget-photo {
     grid-area: photo;
@@ -235,15 +222,14 @@ body::before {
 }
 
 .widget-photo::before {
-    /* washi-tape strip pinning the polaroid */
     content: '';
     position: absolute;
     top: -10px;
     left: 50%;
     width: 70px;
     height: 24px;
-    background: rgba(239, 228, 204, 0.55);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: rgba(207, 190, 155, 0.65);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     transform: translateX(-50%) rotateZ(-3deg);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
@@ -253,16 +239,16 @@ body::before {
 }
 
 .photo-overlay {
-    background: rgba(13, 7, 5, 0.72);
+    background: rgba(13, 7, 5, 0.78);
     padding: 0.5rem 0.85rem;
     font-family: var(--font-stamp);
     font-size: 0.68rem;
     color: var(--paper);
-    border: 1px solid rgba(239, 228, 204, 0.25);
+    border: 1px solid rgba(207, 190, 155, 0.25);
 }
 
 /* ==========================================================================
-   3. SEARCH — an index card with two punch-holes
+   3. SEARCH
    ========================================================================== */
 .widget-search {
     grid-area: search;
@@ -315,7 +301,7 @@ body::before {
 
 .search-box-pill input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.06);
     border: none;
     border-bottom: 2px dashed var(--paper-shadow);
     border-radius: 0;
@@ -344,7 +330,6 @@ body::before {
     color: var(--burgundy-mid);
 }
 
-/* Run button styled as an ink stamp */
 .btn-primary-pill {
     width: 100%;
     margin-top: 0.9rem;
@@ -377,7 +362,7 @@ body::before {
 }
 
 /* ==========================================================================
-   4. PRESETS — scattered sticky notes with a folded corner
+   4. PRESETS
    ========================================================================== */
 .widget-presets {
     grid-area: presets;
@@ -414,7 +399,7 @@ body::before {
 }
 
 .chip {
-    background: rgba(86, 28, 36, 0.06);
+    background: rgba(86, 28, 36, 0.08);
     border: 1px dashed var(--burgundy-mid);
     color: var(--ink-soft);
     padding: 0.4rem 0.7rem;
@@ -433,8 +418,7 @@ body::before {
 }
 
 /* ==========================================================================
-   5. AGENT SWARM — ticket-stub cards with punch-holes, arranged like a
-      card catalog drawer
+   5. AGENT SWARM
    ========================================================================== */
 .widget-quad-grid {
     grid-area: quad;
@@ -492,20 +476,20 @@ body::before {
 
 .quad-card.active {
     border-left-color: var(--stamp);
-    background: linear-gradient(160deg, #f2e6c8, var(--paper-shadow) 180%);
+    background: linear-gradient(160deg, #d8c39e, var(--paper-shadow) 180%);
     transform: translateZ(10px) scale(1.02);
 }
 
 .quad-card.completed {
     border-left-style: solid;
-    border-left-color: #3f7a4a;
+    border-left-color: #2e6037;
 }
 
 .quad-icon {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: rgba(86, 28, 36, 0.1);
+    background: rgba(86, 28, 36, 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -527,18 +511,21 @@ body::before {
 }
 
 /* ==========================================================================
-   6. CENTER STAGE — the case file, with a folder tab and a folded corner
+   6. CENTER STAGE (SCROLLABLE CARD)
    ========================================================================== */
 .widget-center-stage {
     grid-area: center;
     position: relative;
     margin-top: 30px;
-    padding: 1.6rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     background: linear-gradient(150deg, var(--paper) 0%, var(--paper-alt) 100%);
     clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 0 100%);
     transform: rotateZ(0.25deg) rotateX(0.5deg);
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
 }
 
 .widget-center-stage::before {
@@ -566,8 +553,9 @@ body::before {
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px dashed var(--paper-shadow);
-    padding-bottom: 1rem;
+    padding-bottom: 0.85rem;
     margin-bottom: 1rem;
+    flex-shrink: 0;
 }
 
 .tabs-pill {
@@ -605,17 +593,19 @@ body::before {
 .tab-pane {
     display: none;
     flex: 1;
+    min-height: 0;
 }
 
 .tab-pane.active {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-height: 0;
     animation: fadeIn 0.3s ease;
 }
 
 .content-display {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.05);
     border: 1px solid var(--paper-line);
     border-radius: 4px;
     padding: 1.25rem;
@@ -625,6 +615,26 @@ body::before {
     white-space: pre-wrap;
     flex: 1;
     overflow-y: auto;
+    word-break: break-word;
+}
+
+/* Custom Scrollbar for Center Stage */
+.content-display::-webkit-scrollbar {
+    width: 6px;
+}
+
+.content-display::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.content-display::-webkit-scrollbar-thumb {
+    background: var(--paper-shadow);
+    border-radius: 3px;
+}
+
+.content-display::-webkit-scrollbar-thumb:hover {
+    background: var(--burgundy-mid);
 }
 
 .empty-state {
@@ -636,6 +646,7 @@ body::before {
     color: var(--ink-faint);
     text-align: center;
     gap: 0.85rem;
+    padding: 1rem;
 }
 
 .empty-state i {
@@ -644,7 +655,7 @@ body::before {
 }
 
 /* ==========================================================================
-   7. DOCK — a ribbon banner, not a pill
+   7. DOCK
    ========================================================================== */
 .widget-dock {
     height: 56px;
@@ -655,6 +666,7 @@ body::before {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
 }
 
 .dock-left,
@@ -696,11 +708,6 @@ body::before {
     }
 }
 
-/* Touch devices don't have a real hover state, but many mobile browsers
-   still apply :hover styles on tap (and keep them "stuck" until the user
-   taps elsewhere) — that's a common source of a UI feeling laggy or
-   unresponsive on phones. Neutralize every tilt/translateZ hover effect
-   there so a tap just acts like a tap. */
 @media (hover: none) {
 
     .bento-card:hover,
@@ -738,12 +745,14 @@ body::before {
 
     .app-container {
         height: auto;
-        min-height: calc(100svh - 2.5rem);
+        min-height: calc(100vh - 2.5rem);
+    }
+
+    .widget-center-stage {
+        height: 500px;
     }
 }
 
-/* Small phones: the 2x2 agent grid and horizontal tab bar both get
-   cramped below ~480px — stack/scroll them instead of squeezing. */
 @media (max-width: 480px) {
     body {
         padding: 0.75rem;
@@ -758,28 +767,13 @@ body::before {
         flex-wrap: nowrap;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-
-    .tabs-pill::-webkit-scrollbar {
-        display: none;
     }
 
     .tab-btn {
         flex: 0 0 auto;
     }
 
-    .widget-center-stage::before {
-        font-size: 0.58rem;
-        padding: 6px 12px 8px;
-    }
-
     .widget-dock {
         padding: 0 1rem;
-    }
-
-    .dock-btn span,
-    .dock-right span span {
-        font-size: 0.65rem;
     }
 }

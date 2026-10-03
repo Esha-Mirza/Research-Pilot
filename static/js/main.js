@@ -1,11 +1,11 @@
 /**
  * Multi-Agent Research Assistant Logic
- * Handles interactive tabs, live UI agent pipeline status, AJAX requests,
+ * Handles interactive tabs, live UI agent pipeline status, REST requests,
  * and result downloads.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Element Selections
+    // DOM Elements
     const topicInput = document.getElementById('topicInput');
     const runBtn = document.getElementById('runBtn');
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -15,23 +15,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyBtn = document.getElementById('copyBtn');
     const downloadBtn = document.getElementById('downloadBtn');
 
-    // Global memory storage for fetched results
+    // Global result storage
     let currentResults = null;
 
-    // --- Tab Switcher Logic ---
+    // --- 1. Tab Switcher Logic ---
     tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
             const targetTab = btn.getAttribute('data-tab');
 
             tabBtns.forEach(b => b.classList.remove('active'));
             tabPanes.forEach(p => p.classList.remove('active'));
 
             btn.classList.add('active');
-            document.getElementById(`tab-${targetTab}`).classList.add('active');
+            const targetPane = document.getElementById(`tab-${targetTab}`);
+            if (targetPane) {
+                targetPane.classList.add('active');
+            }
         });
     });
 
-    // --- Preset Chips Auto-fill ---
+    // --- 2. Preset Chips Auto-fill ---
     presetChips.forEach(chip => {
         chip.addEventListener('click', () => {
             topicInput.value = chip.textContent.trim();
@@ -39,65 +43,73 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Execute Research Process ---
-    runBtn.addEventListener('click', async () => {
-        const topic = topicInput.value.trim();
+    // --- 3. Execute Research Process ---
+    if (runBtn) {
+        runBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const topic = topicInput.value.trim();
 
-        if (!topic) {
-            alert('Please enter a research topic first.');
-            topicInput.focus();
-            return;
-        }
-
-        setLoadingState(true);
-        resetAgentStatuses();
-
-        try {
-            // Simulate agent stage sequence visually while awaiting backend execution
-            const agentSequenceTimer = simulateAgentPipeline();
-
-            // Send REST request to Flask backend
-            const response = await fetch('/api/research', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ topic: topic })
-            });
-
-            clearInterval(agentSequenceTimer);
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Server error occurred during research execution');
+            if (!topic) {
+                alert('Please enter a research topic first.');
+                topicInput.focus();
+                return;
             }
 
-            const data = await response.json();
-            currentResults = data;
-
-            // Mark all steps as complete in agent UI
-            completeAllAgents();
-
-            // Inject received content into respective views
-            renderResults(data);
-
-        } catch (error) {
-            console.error("Error running research pipeline:", error);
-            alert(`Execution failed: ${error.message}`);
+            setLoadingState(true);
             resetAgentStatuses();
-        } finally {
-            setLoadingState(false);
-        }
-    });
 
-    // Enter key triggers action
-    topicInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            runBtn.click();
-        }
-    });
+            let agentSequenceTimer = null;
 
-    // --- Visual Pipeline Simulation Helper ---
+            try {
+                // Simulate agent sequence visually while fetching
+                agentSequenceTimer = simulateAgentPipeline();
+
+                const response = await fetch('/api/research', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ topic: topic })
+                });
+
+                if (agentSequenceTimer) clearInterval(agentSequenceTimer);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Server error occurred during research execution');
+                }
+
+                const data = await response.json();
+                currentResults = data;
+
+                // Mark agents as completed
+                completeAllAgents();
+
+                // Inject results
+                renderResults(data);
+
+            } catch (error) {
+                if (agentSequenceTimer) clearInterval(agentSequenceTimer);
+                console.error("Error running research pipeline:", error);
+                alert(`Execution failed: ${error.message}`);
+                resetAgentStatuses();
+            } finally {
+                setLoadingState(false);
+            }
+        });
+    }
+
+    // Trigger execution on Enter keypress
+    if (topicInput) {
+        topicInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                runBtn.click();
+            }
+        });
+    }
+
+    // --- Agent Status Helper Functions ---
     function simulateAgentPipeline() {
         let currentStep = 0;
         updateAgentStatus(0, 'active');
@@ -144,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isLoading) {
             runBtn.disabled = true;
             runBtn.style.opacity = '0.7';
-            runBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+            runBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Running...';
         } else {
             runBtn.disabled = false;
             runBtn.style.opacity = '1';
@@ -152,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Display Render Function ---
+    // --- Render Results ---
     function renderResults(results) {
         document.getElementById('tab-search').innerHTML =
             `<div class="content-display">${escapeHtml(results.search || 'No search findings.')}</div>`;
@@ -167,16 +179,16 @@ document.addEventListener('DOMContentLoaded', () => {
             `<div class="content-display">${escapeHtml(results.report || 'No final report generated.')}</div>`;
     }
 
-    // Escape raw output safely
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 
-    // --- Copy to Clipboard Handler ---
+    // --- 4. Copy to Clipboard ---
     if (copyBtn) {
-        copyBtn.addEventListener('click', () => {
+        copyBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             const activePane = document.querySelector('.tab-pane.active .content-display');
             if (!activePane || !activePane.textContent.trim()) {
                 alert('Nothing to copy yet!');
@@ -193,9 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Export Research Package ---
+    // --- 5. Export Research Data ---
     if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => {
+        downloadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             if (!currentResults) {
                 alert('Run research first before downloading output!');
                 return;
