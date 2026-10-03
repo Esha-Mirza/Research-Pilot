@@ -1,9 +1,22 @@
 import os
 import requests
 
-MODEL = os.environ.get("OLLAMA_MODEL", "llama3.2:3b ")
+# NOTE: the default used to be "llama3.2:3b " (trailing space), which Ollama
+# can't match to an installed model. .strip() also protects against stray
+# whitespace in the OLLAMA_MODEL environment variable.
+MODEL = os.environ.get("OLLAMA_MODEL", "llama3.2:3b").strip()
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
-REQUEST_TIMEOUT = int(os.environ.get("OLLAMA_TIMEOUT", "120"))
+# Prompts now carry real source excerpts, so a local model needs more time
+# than before on first load / CPU-only machines.
+REQUEST_TIMEOUT = int(os.environ.get("OLLAMA_TIMEOUT", "300"))
+# Ollama's default context window is small and it silently truncates longer
+# prompts from the start (dropping the instructions!). Set it explicitly.
+NUM_CTX = int(os.environ.get("OLLAMA_NUM_CTX", "6144"))
+
+
+def is_error(text: str) -> bool:
+    """True if `text` is one of call_llm's "Error: ..." messages."""
+    return isinstance(text, str) and text.startswith("Error:")
 
 
 def call_llm(prompt: str, temperature: float = 0.3, num_predict: int = 400) -> str:
@@ -23,6 +36,7 @@ def call_llm(prompt: str, temperature: float = 0.3, num_predict: int = 400) -> s
         "options": {
             "temperature": temperature,
             "num_predict": num_predict,
+            "num_ctx": NUM_CTX,
         },
     }
 
@@ -62,4 +76,4 @@ def call_llm(prompt: str, temperature: float = 0.3, num_predict: int = 400) -> s
     if "response" not in data:
         return f"Error: Unexpected response shape from Ollama: {data}"
 
-    return data["response"].strip()
+    return data["response"].strip()

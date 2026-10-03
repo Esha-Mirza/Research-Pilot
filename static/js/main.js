@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function setLoadingState(isLoading) {
         if (isLoading) {
             runBtn.disabled = true;
-            runBtn.style.opacity = '0.7';
+            runBtn.style.opacity = '0.85';
             runBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Running...';
         } else {
             runBtn.disabled = false;

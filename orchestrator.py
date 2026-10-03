@@ -3,21 +3,26 @@ from agents import search_agent, summarize_agent, checker_agent, report_agent
 def run_research(topic: str) -> dict:
     print(f"🔍 Starting research on: {topic}")
     
-    # Step 1: Search
+    # Step 1: Search (real web sources, numbered [S1], [S2], ...)
     print("📡 Agent 1: Searching...")
-    search_results = search_agent.run(topic)
+    sources = search_agent.collect(topic)
+    search_results = search_agent.format_results(topic, sources)
     
-    # Step 2: Summarize
+    # Step 2: Summarize (every bullet is verified against its cited source)
     print("📝 Agent 2: Summarizing...")
-    summary = summarize_agent.run(search_results)
+    summarized = summarize_agent.summarize(topic, sources)
+    summary = summarized["text"]
     
-    # Step 3: Fact Check
+    # Step 3: Fact Check (automated grounding check + AI review)
     print("✅ Agent 3: Fact-checking...")
-    feedback = checker_agent.run(summary)
+    feedback = checker_agent.run(
+        summary, sources, topic=topic,
+        removed=summarized["removed"], fallback=summarized["fallback"],
+    )
     
     # Step 4: Report
     print("📄 Agent 4: Generating report...")
-    report = report_agent.run(summary, feedback)
+    report = report_agent.run(summary, feedback, sources, topic=topic)
     
     print("🎯 Research complete!")
     
