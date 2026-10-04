@@ -30,7 +30,7 @@ A locally powered research system where four agents search the live web, write s
 
 
 
-<br><br>
+<br>
 
 <!-- Results -->
 <img width="1917" height="873" alt="Image" src="https://github.com/user-attachments/assets/752c1293-a391-4cfd-ac38-17a0db83bd7c" />
@@ -252,7 +252,7 @@ An empty topic returns `400`, and pipeline failures return `500` with an `error`
 
 ---
 
-## 🗺️ Roadmap
+##  Roadmap
 
 - [x] Real-time web search
 - [x] Numbered source citations
@@ -284,7 +284,7 @@ For larger changes, please open an issue first to discuss what you would like to
 
 ---
 
-## 📄 License
+##  License
 
 Distributed under the MIT License. See the `LICENSE` file for details.
 
