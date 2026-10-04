@@ -1,499 +1,292 @@
+<div align="center">
+
+#  Research-Pilot
+
+### Multi-Agent AI Research Assistant
+
+**Research smarter with a team of specialized AI agents.**
+
+A locally powered research system where four agents search the live web, write source-grounded summaries, fact-check the findings, and turn everything into a structured research report, all running on your machine with Ollama.
+
+<br>
+
+[![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-black?logo=ollama)](https://ollama.com/)
+[![TinyLlama](https://img.shields.io/badge/Model-TinyLlama-0467DF)](https://ollama.com/library/tinyllama)
+[![DuckDuckGo](https://img.shields.io/badge/Search-DuckDuckGo-DE5833?logo=duckduckgo&logoColor=white)](https://duckduckgo.com/)
+
+</div>
+
+---
+
+##  Demo
+
 
 <div align="center">
 
-<h1>Research-Pilot</h1>
-Multi-Agent AI Research Assistant
+<!-- Main interface -->
+<img width="1917" height="861" alt="Image" src="https://github.com/user-attachments/assets/c2b77894-2b63-44e6-93f2-aab788c1176c" />
 
-Research smarter with a team of specialized AI agents.
+<br><sub><b>Home</b> · Enter a topic and launch the agent pipeline</sub>
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python\&logoColor=white)](https://www.python.org/)
-[![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-black?logo=ollama)](https://ollama.com/)
-[![LLaMA](https://img.shields.io/badge/LLaMA-Local%20Inference-0467DF)](https://www.llama.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-Interface-FF4B4B?logo=streamlit\&logoColor=white)](https://streamlit.io/)
+<br><br>
 
-A locally powered multi-agent research system that searches, summarizes, fact-checks, and transforms information into structured research reports.
+<!-- Results -->
+<img width="1917" height="873" alt="Image" src="https://github.com/user-attachments/assets/752c1293-a391-4cfd-ac38-17a0db83bd7c" />
+<br><sub><b>Results</b> · Sources, summary, fact-check feedback, and final report</sub>
 
 </div>
 
 
-
 ---
 
-## Overview
+##  Overview
 
-ResearchForge AI is a multi-agent research system designed to automate the research workflow using a team of specialized AI agents.
+Research-Pilot splits the research workflow across **four specialized agents** instead of asking one model to do everything. Each agent has a single job and passes its output to the next stage, so every step is easier to inspect, debug, and improve.
 
-Instead of relying on a single AI model to perform every stage of research, the system divides the workflow into focused roles. Each agent handles a specific responsibility before passing its output to the next stage.
-
-The result is a structured research pipeline that moves from information collection to concise insights, quality review, and final report generation.
+Findings are grounded in **real web sources** retrieved through DuckDuckGo (no API key required). Sources are numbered `[S1]`, `[S2]`, … and every summary bullet is checked against the source it cites. LLM inference runs locally through **Ollama**, so there are no paid LLM APIs involved.
 
 ### Research Pipeline
 
-**Research Topic → Search Agent → Summarizer Agent → Fact-Checker Agent → Report Generator → Final Research Report**
-
-The application runs locally using Ollama, allowing AI inference to take place on the user's machine without requiring external LLM APIs.
-
----
-
-## Why ResearchForge AI?
-
-Traditional AI research assistants often depend on a single model to search, reason, summarize, verify, and write a final response.
-
-ResearchForge AI takes a different approach.
-
-By assigning different responsibilities to specialized agents, the system creates a modular research workflow where each stage has a clearly defined purpose.
-
-This architecture makes the system easier to understand, extend, and experiment with while demonstrating the fundamentals of multi-agent AI orchestration.
-
----
-
-## Key Features
-
-* **Multi-Agent Architecture** — Multiple specialized AI agents collaborate through a structured workflow.
-* **Research Agent** — Collects and organizes research information for the requested topic.
-* **Summarization Agent** — Converts raw findings into concise and useful insights.
-* **Fact-Checking Agent** — Reviews findings for potential inaccuracies, gaps, bias, and unsupported claims.
-* **Report Generation Agent** — Produces a polished, structured research report.
-* **Local AI Inference** — Runs LLM inference locally through Ollama.
-* **Privacy-Focused** — Research processing can remain entirely on the user's machine.
-* **No External LLM API Required** — Uses locally hosted models instead of paid cloud inference.
-* **Modular Design** — Individual agents can be modified or replaced independently.
-* **Interactive Interface** — Provides a simple Streamlit interface for submitting research topics and viewing results.
-* **Export-Friendly Results** — Research outputs can be collected and reused as structured research material.
-
----
-
-## Agent Architecture
-
-ResearchForge AI uses four specialized agents:
-
-| Agent                  | Role                  | Responsibility                                    |
-| ---------------------- | --------------------- | ------------------------------------------------- |
-|  Search Agent          | Information Collector | Gathers research information and initial findings |
-|  Summarizer Agent      | Insight Extractor     | Condenses raw findings into concise insights      |
-|  Fact-Checker Agent    | Quality Reviewer      | Reviews findings for accuracy, bias, and gaps     |
-|  Report Generator      | Research Writer       | Produces the final structured research report     |
-
-### How the Agents Work
-
-```text
-                    ┌─────────────────────┐
-                    │   Research Topic    │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │    Search Agent     │
-                    │  Information Gather │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │  Summarizer Agent   │
-                    │  Extract Key Facts  │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │  Fact-Checker Agent │
-                    │ Review & Validate   │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │ Report Generator    │
-                    │ Generate Final      │
-                    │ Research Report     │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │  Final Report       │
-                    └─────────────────────┘
+```
+Research Topic
+      │
+      ▼
+ Search Agent        →  Collects real web sources, numbered [S1], [S2], ...
+      │
+      ▼
+ Summarizer Agent    →  Writes bullets and verifies each one against its cited source
+      │
+      ▼
+ Fact-Checker Agent  →  Automated grounding check + AI review
+      │
+      ▼
+ Report Agent        →  Produces the final structured research report
 ```
 
 ---
 
-## Technology Stack
+##  Key Features
 
-| Technology    | Purpose                                   |
-| ------------- | ----------------------------------------- |
-| **Python**    | Core application and agent implementation |
-| **Ollama**    | Local LLM runtime and inference           |
-| **LLaMA**     | Language model powering the agents        |
-| **Streamlit** | Interactive web interface                 |
-| **Requests**  | HTTP communication with local services    |
+- **Multi-agent architecture**: four focused agents coordinated by a single orchestrator
+- **Real web search**: live sources via DuckDuckGo, no API key needed
+- **Source-grounded summaries**: every bullet is verified against its cited source, and unsupported claims are removed
+- **Two-layer fact-checking**: an automated grounding check combined with an AI review
+- **Structured reports**: clean, readable final output built from verified findings
+- **Local LLM inference**: runs on Ollama with a lightweight model, so it works on modest hardware
+- **Web interface**: Flask app with a simple UI and a JSON API
+- **Modular design**: each agent lives in its own module and can be modified or replaced independently
 
 ---
 
-## Project Structure
+##  Agents
 
-```text
-researchforge-ai/
+| Agent | Role | Responsibility |
+| --- | --- | --- |
+| **Search Agent** | Information collector | Searches the web and gathers numbered sources for the topic |
+| **Summarizer Agent** | Insight extractor | Condenses sources into concise bullets, each verified against its cited source |
+| **Fact-Checker Agent** | Quality reviewer | Runs a grounding check and an AI review for gaps, bias, and unsupported claims |
+| **Report Agent** | Research writer | Combines summary, feedback, and sources into the final report |
+
+The **orchestrator** (`orchestrator.py`) runs the agents in sequence and returns a single result containing the search results, summary, fact-check feedback, and final report.
+
+---
+
+##  Tech Stack
+
+| Technology | Purpose |
+| --- | --- |
+| **Python** | Core application and agent logic |
+| **Flask** | Web server and REST API |
+| **Ollama** | Local LLM runtime |
+| **TinyLlama** | Default lightweight language model |
+| **ddgs (DuckDuckGo)** | Real web search for the Search Agent |
+| **Requests** | HTTP calls to the local Ollama service |
+| **Gunicorn** | Production WSGI server |
+
+---
+
+##  Project Structure
+
+```
+Research-Pilot/
 │
 ├── agents/
 │   ├── __init__.py
-│   ├── search_agent.py
-│   ├── summarize_agent.py
-│   ├── checker_agent.py
-│   └── report_agent.py
+│   ├── search_agent.py       # Web search and source collection
+│   ├── summarize_agent.py    # Source-verified summarization
+│   ├── checker_agent.py      # Grounding check + AI fact review
+│   └── report_agent.py       # Final report generation
 │
-├── orchestrator.py
-├── frontend.py
+├── templates/                # HTML templates (Flask)
+├── static/                   # CSS, JS, and static assets
+├── assets/screenshots/       # README demo screenshots
+│
+├── app.py                    # Flask app and API endpoint
+├── orchestrator.py           # Runs the four-agent pipeline
+├── frontend.py               # Alternative Streamlit interface (optional)
 ├── requirements.txt
-├── .gitignore
 └── README.md
 ```
 
-### Core Components
-
-**`agents/`**
-Contains the specialized AI agents responsible for different stages of the research workflow.
-
-**`orchestrator.py`**
-Coordinates the agents and manages the overall research pipeline.
-
-**`frontend.py`**
-Provides the Streamlit-based user interface.
-
-**`requirements.txt`**
-Contains the Python dependencies required to run the project.
-
 ---
 
-## Getting Started
+##  Getting Started
 
 ### Prerequisites
 
-Make sure you have the following installed:
+- Python 3.8+
+- [Ollama](https://ollama.com/) installed
+- An internet connection (the Search Agent queries the live web)
+- Enough free disk space and RAM for the selected model
 
-* Python 3.8+
-* Ollama
-* A compatible local LLM
-* 8 GB+ RAM recommended
-* Sufficient storage for the selected model
+### Installation
 
----
-
-## Installation
-
-### 1. Clone the Repository
+**1. Clone the repository**
 
 ```bash
-git clone https://github.com/Esha-Mirza/researchforge-ai.git
-cd researchforge-ai
+git clone https://github.com/Esha-Mirza/Research-Pilot.git
+cd Research-Pilot
 ```
 
-### 2. Create a Virtual Environment
-
-#### Windows
+**2. Create a virtual environment**
 
 ```bash
+# Windows
 python -m venv venv
 venv\Scripts\activate
-```
 
-#### macOS / Linux
-
-```bash
+# macOS / Linux
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 3. Install Dependencies
+**3. Install dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Install a Local Model
-
-For example, using LLaMA 2:
+**4. Pull the local model**
 
 ```bash
-ollama pull llama2
+ollama pull tinyllama
 ```
 
-You can also use a smaller model depending on your available hardware:
+### Run the App
 
-```bash
-ollama pull phi3
-```
-
-```bash
-ollama pull gemma:2b
-```
-
----
-
-## Running the Application
-
-### 1. Start Ollama
+**1. Start Ollama**
 
 ```bash
 ollama serve
 ```
 
-### 2. Launch ResearchForge AI
-
-Open another terminal and run:
+**2. Start Research-Pilot** (in a new terminal)
 
 ```bash
-streamlit run frontend.py
+python app.py
 ```
 
-The application will be available at:
+**3. Open your browser**
 
-```text
-http://localhost:8501
+```
+http://localhost:5000
 ```
 
+> **Optional:** a Streamlit interface is also included. Install it with `pip install streamlit`, then run `streamlit run frontend.py`.
+
 ---
 
-## Usage
+##  Usage
 
-### Step 1 — Enter a Research Topic
+1. Enter a research topic, for example `AI trends in healthcare`
+2. Start the research run
+3. Wait while the agents search, summarize, fact-check, and write
+4. Review the sources, summary, fact-check feedback, and final report
 
-Provide a topic you want the system to investigate.
+### API
 
-Example:
+The Flask backend exposes a single endpoint:
 
-```text
-AI trends in healthcare
+```http
+POST /api/research
+Content-Type: application/json
+
+{ "topic": "AI trends in healthcare" }
 ```
 
-### Step 2 — Start the Research Pipeline
+**Response**
 
-Run the research workflow from the Streamlit interface.
-
-### Step 3 — Let the Agents Collaborate
-
-The system processes the topic through the following stages:
-
-```text
-Topic
-  ↓
-Search
-  ↓
-Summarization
-  ↓
-Fact Checking
-  ↓
-Report Generation
+```json
+{
+  "search":   "numbered web sources [S1], [S2], ...",
+  "summary":  "source-verified summary",
+  "feedback": "fact-checker review",
+  "report":   "final structured report"
+}
 ```
 
-### Step 4 — Review the Final Report
-
-The Report Generator produces a structured research document containing key findings, insights, and recommendations.
+An empty topic returns `400`, and pipeline failures return `500` with an `error` message.
 
 ---
 
-## Example Research Topics
+##  Example Topics
 
-ResearchForge AI can be used to explore topics such as:
-
-* Artificial Intelligence in Healthcare
-* Renewable Energy Technologies
-* Quantum Computing
-* Electric Vehicle Industry Trends
-* Blockchain Applications
-* Cybersecurity Developments
-* AI Startups and Market Trends
-* Future of Robotics
-* Generative AI Applications
-* Emerging Technology Trends
+- Artificial intelligence in healthcare
+- Renewable energy technologies
+- Quantum computing applications
+- Electric vehicle market trends
+- Blockchain in finance
+- Cybersecurity developments
 
 ---
 
-## Example Workflow
+##  Design Principles
 
-### Input
-
-```text
-AI trends in healthcare
-```
-
-### Search Agent
-
-Collects relevant information and research findings.
-
-### Summarizer Agent
-
-Transforms the collected information into concise insights.
-
-### Fact-Checker Agent
-
-Reviews the findings and identifies:
-
-* Potential inaccuracies
-* Missing information
-* Possible bias
-* Unsupported claims
-* Areas requiring additional research
-
-### Report Generator
-
-Combines the processed information into a structured research report containing:
-
-* Executive Summary
-* Key Findings
-* Important Insights
-* Research Considerations
-* Recommendations
+- **Specialized agents**: one responsibility per agent
+- **Grounded outputs**: claims are tied to numbered sources and verified before they reach the report
+- **Sequential pipeline**: each stage feeds the next, keeping the flow predictable
+- **Local-first inference**: the LLM runs on your machine through Ollama
+- **Modular architecture**: easy to extend, swap, or test individual agents
 
 ---
 
-## Configuration
+## 🗺️ Roadmap
 
-### Change the LLM
-
-The model used by the agents can be changed according to your hardware and performance requirements.
-
-For example:
-
-```python
-MODEL = "llama2"
-```
-
-You can replace it with another model available through Ollama:
-
-```python
-MODEL = "phi3"
-```
-
-or:
-
-```python
-MODEL = "gemma:2b"
-```
-
-### Change the Streamlit Port
-
-```bash
-streamlit run frontend.py --server.port 8502
-```
+- [x] Real-time web search
+- [x] Numbered source citations
+- [x] Source-grounded summary verification
+- [ ] PDF and Markdown report export
+- [ ] Research history and session management
+- [ ] Parallel agent execution
+- [ ] Model selection from the UI
+- [ ] Source credibility scoring
 
 ---
 
-## Design Principles
+##  Privacy
 
-ResearchForge AI is built around several core principles:
-
-### Specialized Agents
-
-Each agent has one clearly defined responsibility rather than forcing one model to handle the entire workflow.
-
-### Sequential Processing
-
-The output of one stage becomes the input for the next stage, creating a predictable research pipeline.
-
-### Local-First AI
-
-The project uses locally hosted models through Ollama, reducing dependence on external inference APIs.
-
-### Modular Architecture
-
-Agents are separated into individual modules, making it easier to modify, replace, or extend the system.
-
-### Human-Readable Output
-
-The final stage focuses on transforming intermediate agent outputs into a structured research report.
+LLM processing runs locally through Ollama, so prompts and generated text are not sent to a cloud LLM provider. The Search Agent does query DuckDuckGo to retrieve web sources, so search queries leave your machine.
 
 ---
 
-## Future Roadmap
-
-* [ ] Integrate real-time web search
-* [ ] Add source citations and references
-* [ ] Introduce parallel agent execution
-* [ ] Add configurable agent roles
-* [ ] Support multiple local LLMs
-* [ ] Add research history and session management
-* [ ] Add PDF and Markdown report export
-* [ ] Add source credibility scoring
-* [ ] Introduce persistent research memory
-* [ ] Add research comparison across multiple topics
-* [ ] Improve report formatting and visualization
-* [ ] Add configurable research depth
-
----
-
-## Use Cases
-
-ResearchForge AI can serve as a foundation for:
-
-*  Automated research workflows
-*  Academic research assistance
-*  Market and industry research
-*  Knowledge discovery
-*  Research summarization
-*  Business intelligence prototypes
-*  Multi-agent AI experimentation
-*  Agentic AI research and development
-
----
-
-## Learning Objectives
-
-This project demonstrates practical concepts in:
-
-* Multi-agent AI systems
-* LLM-powered applications
-* Agent specialization
-* AI workflow orchestration
-* Local LLM inference
-* Prompt-driven task delegation
-* Automated summarization
-* AI-assisted fact checking
-* Structured report generation
-* Streamlit application development
-
----
-
-## Privacy
-
-ResearchForge AI is designed around local AI inference through Ollama.
-
-When configured to use only local models, the core LLM processing does not require sending prompts to a third-party cloud LLM provider.
-
-> Always review the tools and integrations you add to the project before assuming complete offline operation.
-
----
-
-## Contributing
+##  Contributing
 
 Contributions are welcome.
 
-If you would like to improve ResearchForge AI:
-
 1. Fork the repository
-2. Create a feature branch
-3. Implement your changes
-4. Test the workflow
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes
+4. Push the branch and open a pull request
 
-For larger changes, consider opening an issue first to discuss the proposed improvement.
-
----
-
-## License
-
-This project is licensed under the MIT License.
-
-See the `LICENSE` file for more information.
+For larger changes, please open an issue first to discuss what you would like to change.
 
 ---
 
-## Acknowledgments
+## 📄 License
 
-Built with:
-
-* Python
-* Ollama
-* LLaMA
-* Streamlit
-
-Special thanks to the open-source AI ecosystem for making local LLM experimentation and multi-agent development accessible.
+Distributed under the MIT License. See the `LICENSE` file for details.
 
 ---
 
@@ -501,12 +294,15 @@ Special thanks to the open-source AI ecosystem for making local LLM experimentat
 
 **Esha Mirza**
 
-**GitHub:** [Esha-Mirza](https://github.com/Esha-Mirza)
+[![GitHub](https://img.shields.io/badge/GitHub-Esha--Mirza-181717?logo=github)](https://github.com/Esha-Mirza)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-esha--mirza1623-0A66C2?logo=linkedin&logoColor=white)](https://linkedin.com/in/esha-mirza1623)
 
 ---
 
-<p align="center">
-  <strong>ResearchForge AI</strong>
-  <br>
-  Turning complex research workflows into coordinated AI intelligence.
-</p>
+<div align="center">
+
+** Research-Pilot**
+
+*Research smarter with a team of specialized AI agents.*
+
+</div>
