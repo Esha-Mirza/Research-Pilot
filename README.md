@@ -301,7 +301,7 @@ Distributed under the MIT License. See the `LICENSE` file for details.
 
 <div align="center">
 
-** Research-Pilot**
+**Research-Pilot**
 
 *Research smarter with a team of specialized AI agents.*
 
