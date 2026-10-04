@@ -28,13 +28,13 @@ A locally powered research system where four agents search the live web, write s
 <!-- Main interface -->
 <img width="1917" height="861" alt="Image" src="https://github.com/user-attachments/assets/c2b77894-2b63-44e6-93f2-aab788c1176c" />
 
-<br><sub><b>Home</b> · Enter a topic and launch the agent pipeline</sub>
+
 
 <br><br>
 
 <!-- Results -->
 <img width="1917" height="873" alt="Image" src="https://github.com/user-attachments/assets/752c1293-a391-4cfd-ac38-17a0db83bd7c" />
-<br><sub><b>Results</b> · Sources, summary, fact-check feedback, and final report</sub>
+
 
 </div>
 
